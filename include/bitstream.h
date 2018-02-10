@@ -234,9 +234,9 @@ public:
     template<typename T>    
     bitstream& operator<<(const T& data)
     {
-        static_assert(std::is_pod<T>(), "Need a specialized serialized function for non-POD types");
+        static_assert(std::is_trivially_copyable<T>(), "Need a specialized serialized function for non-POD types");
 
-        if(m_pos + sizeof(T) >= size())
+        if(m_pos + sizeof(T) > size())
         {
             uint32_t newSize = m_pos + sizeof(T);
             resize(newSize);
