@@ -6,6 +6,7 @@
 #include <math.h>
 #include <string>
 #include <vector>
+#include <fstream>
 #include <set>
 #include <stdexcept>
 
@@ -213,6 +214,10 @@ public:
         *data = &m_data[m_pos];
         m_pos += length;
     }
+
+#ifndef IS_ENCLAVE
+    bitstream& operator<<(std::ifstream &file);
+#endif
 
     template<typename T>
     bitstream& operator<<(const std::set<T>& data);
@@ -474,6 +479,26 @@ bitstream& bitstream::operator<<(const std::vector<T>& data)
 
     return *this;
 }
+
+#ifndef IS_ENCLAVE
+inline
+bitstream& bitstream::operator<<(std::ifstream &file)
+{
+    file.seekg(0, std::ios::end);
+    int file_size = file.tellg();
+    file.seekg(0);
+
+    if(file_size <= 0)
+    {
+        throw std::runtime_error("invalid file");
+    }
+    
+    resize(size()+file_size);
+    file.read(reinterpret_cast<char*>(current()), file_size);
+
+    return *this; 
+}
+#endif
 
 template<typename T> inline
 bitstream& bitstream::operator<< (const std::set<T> &s)
