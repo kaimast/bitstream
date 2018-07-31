@@ -5,9 +5,7 @@
 #include <cstring>
 #include <math.h>
 #include <string>
-#include <vector>
 #include <fstream>
-#include <set>
 #include <stdexcept>
 
 class bitstream
@@ -219,18 +217,6 @@ public:
     bitstream& operator<<(std::ifstream &file);
 #endif
 
-    template<typename T>
-    bitstream& operator<<(const std::set<T>& data);
-
-    template<typename T>
-    bitstream& operator<<(const std::vector<T>& data);
-
-    template<typename T>
-    bitstream& operator>>(std::vector<T>& data);
-
-    template<typename T>
-    bitstream& operator>>(std::set<T>& set);
-
     /**
      * Write virtually any kind of data to the stream
      *
@@ -436,50 +422,6 @@ private:
     bool m_read_only;
 };
 
-template<typename T> inline
-bitstream& bitstream::operator>>(std::set<T> &data)
-{
-    uint32_t size = 0;
-    (*this) >> size;
-
-    for(uint32_t i = 0; i < size; ++i)
-    {
-        T t;
-        (*this) >> t;
-        data.insert(t);
-    }
-
-    return (*this);
-}
-
-template<typename T> inline
-bitstream& bitstream::operator>>(std::vector<T> &data)
-{
-    uint32_t size = 0;
-    (*this) >> size;
-    data.resize(size);
-
-    for(uint32_t i = 0; i < size; ++i)
-    {
-        (*this) >> data[i];
-    }
-    return (*this);
-}
-
-template<typename T> inline
-bitstream& bitstream::operator<<(const std::vector<T>& data)
-{
-    uint32_t size = data.size();
-    (*this) << size;
-
-    for(uint32_t i = 0; i < data.size(); ++i)
-    {
-        (*this) << data[i];
-    }
-
-    return *this;
-}
-
 #ifndef IS_ENCLAVE
 inline
 bitstream& bitstream::operator<<(std::ifstream &file)
@@ -499,48 +441,6 @@ bitstream& bitstream::operator<<(std::ifstream &file)
     return *this; 
 }
 #endif
-
-template<typename T> inline
-bitstream& bitstream::operator<< (const std::set<T> &s)
-{
-    uint32_t size = s.size();
-    (*this) << size;
-
-    for(auto &e: s)
-    {
-        (*this) << e;
-    }
-
-    return *this;
-}
-
-template<> inline
-bitstream& bitstream::operator<< <std::string>(const std::string& str)
-{
-    uint32_t length = str.size();
-    *this << length;
-
-    if(length > 0)
-    {
-        write_raw_data(reinterpret_cast<const uint8_t*>(str.c_str()), length);
-    }
-
-    return *this;
-}
-
-template<> inline
-bitstream& bitstream::operator<< <bitstream>(const bitstream &other)
-{
-    uint32_t length = other.size();
-    *this << length;
-
-    if(length > 0)
-    {
-        write_raw_data(other.data(), length);
-    }
-
-    return *this;
-}
 
 template<> inline
 bitstream& bitstream::operator>> <bitstream>(bitstream &bstream)
@@ -569,6 +469,22 @@ bitstream& bitstream::operator>> <bitstream>(bitstream &bstream)
 }
 
 template<> inline
+bitstream& bitstream::operator<< <bitstream>(const bitstream &other)
+{
+    uint32_t length = other.size();
+    *this << length;
+
+    if(length > 0)
+    {
+        write_raw_data(other.data(), length);
+    }
+
+    return *this;
+}
+
+
+
+template<> inline
 bitstream& bitstream::operator>> <char>(char& data)
 {
     if(at_end())
@@ -582,24 +498,6 @@ bitstream& bitstream::operator>> <char>(char& data)
     return *this;
 }
 
-template<> inline
-bitstream& bitstream::operator>> <std::string>(std::string& data)
-{
-    data = "";
-
-    uint32_t length;
-    *this >> length;
-
-    for(uint32_t i = 0; i < length; ++i)
-    {
-        char c;
-        *this >> c;
-
-        data += c;
-    }
-
-    return *this;
-}
 
 inline bool operator==(const bitstream &first, const bitstream &second)
 {
@@ -608,4 +506,6 @@ inline bool operator==(const bitstream &first, const bitstream &second)
     else
         return memcmp(first.data(), second.data(), first.size()) == 0;
 }
+
+
  
