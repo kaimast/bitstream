@@ -482,8 +482,6 @@ bitstream& bitstream::operator<< <bitstream>(const bitstream &other)
     return *this;
 }
 
-
-
 template<> inline
 bitstream& bitstream::operator>> <char>(char& data)
 {
@@ -502,9 +500,18 @@ bitstream& bitstream::operator>> <char>(char& data)
 inline bool operator==(const bitstream &first, const bitstream &second)
 {
     if(first.size() != second.size())
+    {
         return false;
+    }
     else
+    {
         return memcmp(first.data(), second.data(), first.size()) == 0;
+    }
+}
+
+inline bool operator!=(const bitstream &first, const bitstream &second)
+{
+    return !(first == second);
 }
 
 

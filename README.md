@@ -39,9 +39,9 @@ view.assign(bs.data(), bs.size(), true);
 ```
 
 ## Building
-There is no need to compile this project. Is is headers-only (actually it just a single header at this point).
-Just copy the bistream.h to your include directory or project.
-Alternatively, you can use meson and ninja to install the header.
+There is no need to compile this project, it is headers-only. Just copy the bistream.h to your include directory or project.
+
+Alternatively, you can use meson and ninja to install the header as well as build tests. You need to have google-test installed for this.
 
 ```bash
 meson build
