@@ -80,14 +80,15 @@ public:
 
         if(m_read_only && !force_copy)
         {
-            bitstream result;
             result.assign(m_data, m_size, true);
-            return result;
         }
         else
         {
-            return bitstream(m_data, m_size);
+            result = bitstream(m_data, m_size);
         }
+
+        result.move_to(pos());
+        return result;
     }
 
     void clear()
