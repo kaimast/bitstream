@@ -49,6 +49,11 @@ public:
         clear();
     }
 
+    bool is_read_only() const
+    {
+        return m_read_only;
+    }
+
     /**
      * Allocate initial buffer space so we reduce the number of mallocs
      */
