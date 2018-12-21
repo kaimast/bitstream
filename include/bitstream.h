@@ -54,6 +54,14 @@ public:
         return m_read_only;
     }
 
+    /// Create read-only bitstream that accesses this bitstream's data
+    bitstream make_view() const
+    {
+        bitstream view;
+        view.assign(data(), size(), true);
+        return view;
+    }
+
     /**
      * Allocate initial buffer space so we reduce the number of mallocs
      */

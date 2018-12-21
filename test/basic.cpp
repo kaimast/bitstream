@@ -40,6 +40,24 @@ TEST(BasicTest, duplicate)
     EXPECT_EQ(res2, v2);
 }
 
+TEST(BasicTest, view)
+{
+    bitstream bs1;
+    size_t v1 = 42;
+    size_t v2 = 23;
+
+    bs1 << v1;
+    bs1 << v2;
+
+    auto bs2 = bs1.make_view();
+
+    size_t res1, res2;
+    bs2 >> res1 >> res2;
+
+    EXPECT_EQ(res1, v1);
+    EXPECT_EQ(res2, v2);
+}
+
 TEST(BasicTest, read_only)
 {
     bitstream bs1, bs2;
