@@ -291,6 +291,8 @@ public:
         if(m_size == 0)
         {
             out = nullptr;
+            // there might be pre-allocated buffer
+            free(m_data);
         }
         else if(m_size < m_alloc_size)
         {
