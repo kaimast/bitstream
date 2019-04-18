@@ -29,7 +29,7 @@ public:
         : m_pos(0), m_size(0), m_alloc_size(MIN_REALLOC), m_data(nullptr), m_read_only(false)
     {
         m_data = reinterpret_cast<uint8_t*>(malloc(m_alloc_size));
-        
+
         if(length > 0)
         {
             write_raw_data(data, length, false);
@@ -288,7 +288,11 @@ public:
 
     void detach(uint8_t*& out, uint32_t &len)
     {
-        if(m_size < m_alloc_size)
+        if(m_size == 0)
+        {
+            out = nullptr;
+        }
+        else if(m_size < m_alloc_size)
         {
             out = reinterpret_cast<uint8_t*>(realloc(m_data, m_size));
         }
