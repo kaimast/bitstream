@@ -1,0 +1,13 @@
+dist: xenial
+sudo: required
+language: cpp
+
+cache:
+    directories:
+        - $HOME/prereq
+        - $HOME/local
+
+script:
+    - bash ci/install-packages.sh
+    - bash ci/setup-bitstream.sh
+    - bash ci/unit-tests.sh

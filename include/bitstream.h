@@ -106,8 +106,9 @@ public:
 
     void clear()
     {
-        if(m_data != nullptr && !m_read_only)
+        if(!m_read_only && m_data != nullptr)
         {
+            // NOLINTNEXTLINE
             free(m_data);
         }
 

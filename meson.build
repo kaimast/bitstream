@@ -13,4 +13,20 @@ subdir('test')
 
 tests = executable('bitstream-test', unit_test_cpp_files, include_directories: [local_incdir], dependencies: [gtest_dep], cpp_args: compile_args)
 
+clangtidy = find_program('clang-tidy', required: false)
+
+if clangtidy.found()
+    tidy_files = unit_test_cpp_files
+
+    run_target(
+        'tidy',
+        command: [
+            'scripts/clang-tidy.sh',
+            clangtidy.path(),
+            meson.source_root(),
+            meson.build_root(),
+            tidy_files
+        ],
+    depends: [tests])
+endif
 
