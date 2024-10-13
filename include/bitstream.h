@@ -1,10 +1,10 @@
 #pragma once
 
+#include <cmath>
+#include <cstdint>
 #include <cstring>
 #include <fstream>
-#include <cmath>
 #include <stdexcept>
-#include <cstdint>
 #include <type_traits>
 
 class bitstream {
@@ -45,7 +45,9 @@ class bitstream {
     ~bitstream() { clear(); }
 
     [[nodiscard]]
-    bool is_read_only() const { return m_read_only; }
+    bool is_read_only() const {
+        return m_read_only;
+    }
 
     /// Create read-only bitstream that accesses this bitstream's data
     [[nodiscard]]
@@ -103,7 +105,7 @@ class bitstream {
         m_size = m_alloc_size = 0;
     }
 
-    bitstream& operator=(bitstream &&other) noexcept {
+    bitstream &operator=(bitstream &&other) noexcept {
         clear();
 
         m_data = other.m_data;
