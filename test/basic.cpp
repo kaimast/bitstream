@@ -2,12 +2,9 @@
 
 #include "bitstream.h"
 
-class BasicTest : public testing::Test
-{
-};
+class BasicTest : public testing::Test {};
 
-TEST(BasicTest, equality)
-{
+TEST(BasicTest, equality) {
     bitstream bs1, bs2, bs3;
     bs1 << "foobar";
     bs2 << "foobaz";
@@ -18,11 +15,10 @@ TEST(BasicTest, equality)
     EXPECT_EQ(bs1, bs3);
 }
 
-TEST(BasicTest, duplicate)
-{
+TEST(BasicTest, duplicate) {
     bitstream bs1;
-    size_t v1 = 42;
-    size_t v2 = 23;
+    const size_t v1 = 42;
+    const size_t v2 = 23;
 
     bs1 << v1;
     auto pos = bs1.pos();
@@ -40,11 +36,10 @@ TEST(BasicTest, duplicate)
     EXPECT_EQ(res2, v2);
 }
 
-TEST(BasicTest, view)
-{
+TEST(BasicTest, view) {
     bitstream bs1;
-    size_t v1 = 42;
-    size_t v2 = 23;
+    const size_t v1 = 42;
+    const size_t v2 = 23;
 
     bs1 << v1;
     bs1 << v2;
@@ -58,11 +53,10 @@ TEST(BasicTest, view)
     EXPECT_EQ(res2, v2);
 }
 
-TEST(BasicTest, read_only)
-{
+TEST(BasicTest, read_only) {
     bitstream bs1, bs2;
 
-    size_t val = 42;
+    const size_t val = 42;
     bs1 << val;
 
     bs2.assign(bs1.data(), bs1.size(), true);
