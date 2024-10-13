@@ -1,0 +1,34 @@
+name: Continuous Integration 
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install Packages
+        run: |
+            sudo apt-get update
+            sudo apt-get install meson ninja-build build-essential git \
+                clang-tidy clang googletest libgtest-dev
+      - name: Configure 
+        run: meson setup build -Dbuildtype=release --prefix=$HOME/local
+      - name: Unit Tests
+        timeout-minutes: 5
+        run: cd build && GLOG_v=3 ninja unit-tests
+      - name: Lint Checks 
+        run: cd build && ninja lint 
+      - name: Formatting Checks 
+        run: cd build && ninja clang-format-check 

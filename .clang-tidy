@@ -1,0 +1,1 @@
+Checks: 'hicpp-*,bugprone-*,modernize-*,misc-*,-modernize-avoid-c-arrays,-modernize-use-trailing-return-type,-hicpp-no-malloc,-misc-include-cleaner,-hicpp-special-member-functions'
