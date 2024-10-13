@@ -22,7 +22,7 @@ jobs:
         run: |
             sudo apt-get update
             sudo apt-get install meson ninja-build build-essential git \
-                clang-tidy clang
+                clang-tidy clang googletest libgtest-dev
       - name: Configure 
         run: meson setup build -Dbuildtype=release --prefix=$HOME/local
       - name: Unit Tests
