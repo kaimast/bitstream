@@ -2,6 +2,8 @@
 
 If you feel like Google protocol buffers are too complex for your project, bitstreams are here for the resuce!
 
+*Note:* bitstream does not handle differences in endianess.
+
 ## Usage
 ### Reading and Writing
 Bitstream are used like any other stream in C++. Just overload to the << and >> operators to (de-)serialize data. It comes with overloads for all basic STL cotainers, such as list, set, or vector, and PODs need no specialized operator at all.
